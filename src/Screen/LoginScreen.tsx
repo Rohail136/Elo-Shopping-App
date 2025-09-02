@@ -1,101 +1,152 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import React from 'react'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../Navigation/RootsStackParamList'
-import ScreenName from '../Constant/ScreenName'
-import Logo1 from '../assets/Logo1.jpg'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../Navigation/RootsStackParamList';
+import ScreenName from '../Constant/ScreenName';
+import Logo1 from '../assets/Logo1.jpg';
 
+type Props = NativeStackScreenProps<RootStackParamList, ScreenName.LoginScreen>;
 
-type Props = NativeStackScreenProps<RootStackParamList, ScreenName.LoginScreen>
+const LoginScreen = ({ navigation }: Props) => {
+  const emailRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
 
-const LoginScreen = ({route, navigation}: Props) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    console.log('Email:', email);
+    console.log('Password:', password);
+
+    // Clear fields after login
+    setEmail('');
+    setPassword('');
+  };
+
+  const handleFocus = () => {
+    if (!email) {
+      emailRef.current?.focus();
+    } else if (!password) {
+      passwordRef.current?.focus();
+    } else {
+      handleLogin();
+    }
+  };
+
   return (
-    
     <View style={styles.container}>
-      <Image
-        source={Logo1}
-        style={{resizeMode: 'cover', width: 300, height: 150, borderRadius: 10, marginBottom: 1}}
-      />
-       <Text> {route.params?.title}</Text>
-      <View style={styles.fieldcontainer}>
-        <TextInput placeholder='Enter Your Email' style={styles.inputfield}></TextInput>
-        <TextInput placeholder='Enter Your Password' style={styles.inputfield}></TextInput>
-        <TouchableOpacity style={styles.Forgetcontainer}>
-          <Text>Forget password ?</Text>
+      <Image source={Logo1} style={styles.image} />
+
+      <Text style={styles.loginText}>Login</Text>
+
+      <View style={styles.fieldContainer}>
+        <TextInput
+          ref={emailRef}
+          placeholder="Enter Your Email"
+          style={styles.inputField}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+        />
+
+        <TextInput
+          ref={passwordRef}
+          placeholder="Enter Your Password"
+          style={styles.inputField}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
+        />
+
+        <TouchableOpacity style={styles.forgetContainer}>
+          <Text>Forget password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttoncontainer}>
-          <Text style={{color: 'white'}}>Login</Text>
+
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleFocus}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginTop: 30}}>
-        <Text>Don't have an account?</Text>
-        <TouchableOpacity onPress = {()=>{
-          navigation.navigate(ScreenName.SignUp,{
-            title:'SignUp',
-            discription:'HI Im form LoginScreen'}
-          )}}><Text style={{marginLeft: 5, color: 'blue'}}>SignUp</Text></TouchableOpacity>
+
+        <View style={styles.signUpContainer}>
+          <Text>Don't have an account?</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(ScreenName.SignUp, {
+                title: 'SignUp',
+                discription: 'HI I’m from LoginScreen',
+              })
+            }
+          >
+            <Text style={styles.signUpText}>SignUp</Text>
+          </TouchableOpacity>
         </View>
-        {/* <TouchableOpacity style = {styles.SignContainer}>
-             <Text>Create Account ?</Text>
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity 
-         onPress = {()=>{
-          navigation.navigate(ScreenName.SignUp,{
-            title:'SignUp',
-            discription:'HI Im form LoginScreen'}
-          )}}
-            style={styles.buttonSignUp}>
-          <Text style={{color: 'white'}}>Signup</Text>
-        </TouchableOpacity> */}
-        
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default LoginScreen
+export default LoginScreen;
 
 const styles = StyleSheet.create({
-
-container:{
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: '#c2cac365'
-},
-inputfield:{
-  backgroundColor: 'white',
-  height: 40,
-  width: 250,
-  // color: 'white',
-  borderRadius: 10,
-  marginTop: 10,
-  paddingHorizontal : 10,
-
-},
-fieldcontainer: {
-  marginTop: 20,
-},
-buttoncontainer:{
-  alignItems: 'center',
-  marginTop: 20,
-  backgroundColor: 'black',
-  paddingVertical: 10,
-  marginHorizontal: 50,
-  borderRadius: 10,
-},
-Forgetcontainer:{
-  alignItems:'flex-end',
-  marginTop: 10,
-},
-buttonSignUp:{
-  alignItems: 'center',
-  marginTop: 10,
-  backgroundColor: 'blue',
-  paddingVertical: 10,
-  marginHorizontal: 50,
-  borderRadius: 10,
-},
-SignContainer:{
-  marginTop:30,
-}
-})
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#b6ebbc65',
+  },
+  image: {
+    resizeMode: 'cover',
+    width: 300,
+    height: 180,
+    borderRadius: 10,
+    marginBottom: 1,
+    shadowRadius: 4,
+    elevation: 7,
+  },
+  loginText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingTop: 10,
+  },
+  fieldContainer: {
+    marginTop: 20,
+  },
+  inputField: {
+    backgroundColor: 'white',
+    height: 45,
+    width: 260,
+    borderRadius: 10,
+    marginTop: 12,
+    paddingHorizontal: 12,
+  },
+  forgetContainer: {
+    alignItems: 'flex-end',
+    marginTop: 10,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    backgroundColor: 'black',
+    paddingVertical: 12,
+    marginHorizontal: 55,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  signUpContainer: {
+    flexDirection: 'row',
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  signUpText: {
+    marginLeft: 5,
+    color: 'blue',
+    fontWeight: '500',
+  },
+});
