@@ -4,6 +4,7 @@ import TopBarHeader from '../TopBarHeader/TopBarHeader'
 import { TextInput } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+
 const CategoriesScreen = () => {
   const [username, setUsername] = useState('');
   const [storeusername , setStoreUserName] = useState('');

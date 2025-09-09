@@ -10,6 +10,7 @@ const CartScreen = () => {
   // const [refresh, setRefresh] = useState(false);
   const [cartItem, setCartItem] = useState<any[]>([]);
   const [loadItem, setLoadItem] = useState(false);
+  const [searchbar, setSearchBar] = useState('')
 
   //load from Asyncstorage
   const loadCart = async () => {
@@ -59,7 +60,7 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TopBarHeader />
+      <TopBarHeader searchText={searchbar} setSearchText={setSearchBar}/>
       <View style={styles.centerContent}>
         <Text style={styles.text}> My Cart 🛒 </Text>
 

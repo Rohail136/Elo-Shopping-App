@@ -1,36 +1,41 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../Navigation/RootsStackParamList';
+// import { RootStackParamList } from '../Navigation/RootsStackParamList';
 import ScreenName from '../Constant/ScreenName';
 import Logo1 from '../assets/Logo1.jpg';
 
-type Props = NativeStackScreenProps<RootStackParamList, ScreenName.LoginScreen>;
+// type Props = NativeStackScreenProps<RootStackParamList, ScreenName.LoginScreen>;
 
-const LoginScreen = ({ navigation }: Props) => {
+const LoginScreen = ({ navigation }: any) => {
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
-
-  const [email, setEmail] = useState('');
+  // const [name, setName] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    console.log('Email:', email);
+    console.log('Email:', name);
     console.log('Password:', password);
-
+    navigation.navigate("HomeScreen", {
+      screen : "Home",
+      params : {name}
+    })
     // Clear fields after login
-    setEmail('');
+    setName('');
     setPassword('');
   };
 
   const handleFocus = () => {
-    if (!email) {
+    if (!name) {
       emailRef.current?.focus();
     } else if (!password) {
       passwordRef.current?.focus();
     } else {
       handleLogin();
+
     }
+
   };
 
   return (
@@ -42,13 +47,13 @@ const LoginScreen = ({ navigation }: Props) => {
       <View style={styles.fieldContainer}>
         <TextInput
           ref={emailRef}
-          placeholder="Enter Your Email"
+          placeholder="Enter Your Name"
           style={styles.inputField}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
+          value={name}
+          onChangeText={setName}
+          // keyboardType="email-address"
           autoCapitalize="none"
-          returnKeyType="next"
+          // returnKeyType="next"
           onSubmitEditing={() => passwordRef.current?.focus()}
         />
 
@@ -59,7 +64,7 @@ const LoginScreen = ({ navigation }: Props) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          returnKeyType="done"
+          // returnKeyType="done"
           onSubmitEditing={handleLogin}
         />
 

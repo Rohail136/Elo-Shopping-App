@@ -1,16 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../Layout/Layout'
 import BottomTabNavigator from '../Navigation/BottomTabNavigator'
 import TopBarHeader from '../TopBarHeader/TopBarHeader'
 import ProductGrid from '../FLatList/ProductGrid'
 import { Cards } from '../Data/CardProduct'
+import { SearchBar } from 'react-native-screens'
 
 const MenDrawer : React.FC = () => {
+  const [searchtext, setSeaarchText] = useState('')
+
+  const filterData = Cards.filter((card) => 
+  card.title.toLowerCase().includes(searchtext.toLowerCase())
+  )
   return (
     <View style={styles.container}>
-      <TopBarHeader/>
-      <ProductGrid data={Cards} />
+      <TopBarHeader searchText={searchtext} setSearchText={setSeaarchText}/>
+      <ProductGrid data={filterData} />
     </View>
   )
 }
