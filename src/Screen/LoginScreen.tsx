@@ -1,29 +1,37 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 // import { RootStackParamList } from '../Navigation/RootsStackParamList';
 import ScreenName from '../Constant/ScreenName';
 import Logo1 from '../assets/Logo1.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // type Props = NativeStackScreenProps<RootStackParamList, ScreenName.LoginScreen>;
 
 const LoginScreen = ({ navigation }: any) => {
+  //for focus Inputfield
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
-  // const [name, setName] = useState('')
+  //for state saving values
   const [name, setName] = useState('')
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Email:', name);
-    console.log('Password:', password);
-    navigation.navigate("HomeScreen", {
-      screen : "Home",
-      params : {name}
-    })
-    // Clear fields after login
-    setName('');
-    setPassword('');
+  const handleLogin = async () => {
+    try {
+       await AsyncStorage.setItem('Username', name)
+       console.log('Email:', name);
+       console.log('Password:', password);
+       navigation.navigate("HomeScreen", 
+        {
+       screen : "Home",
+        })
+       // Clear fields after login
+       setName('');
+       setPassword('');
+    } catch (error) {
+      Alert.alert("Error", "Failed to saved")
+      console.log(error)
+    }
   };
 
   const handleFocus = () => {
